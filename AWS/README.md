@@ -14,7 +14,7 @@ Each script run takes the following actions:
 3. Installs default tensorflow.
 4. Runs `tf_cnn_benchmarks.py` in the default environment.
 5. Activates the Intel optimized tensorflow virtualenv and runs `tf_cnn_benchmarks.py` in the Intel Optimized environment.
-6. Prints the throughput or latency values (for training or inference, respectively) with relative speedups realized with Intel Optimized TensorFlow.
+6. Prints the throughput with relative speedups realized with Intel Optimized TensorFlow.
 
 **NOTE:** Running the entire benchmarking suite may take some time depending on the hardware you're running on, so please be patient while it is executing.
 
