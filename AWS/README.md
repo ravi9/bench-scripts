@@ -9,8 +9,8 @@ This repo contains benchmarking scripts for training and inference on common CNN
 
 Each script run takes the following actions:
 
-1. Detects which version of TensorFlow is present and clones the official TensorFlow benchmarks repo which are compatible.
-2. Parses the arguments `-n` for setting the networks and `-i` for setting either training or inference.
+1. Parses the arguments `-n` for setting the networks and `-i` for setting either training or inference. 
+2. Detects which version of TensorFlow is present and clones the compatible branch of the [official TensorFlow benchmarks repo](https://github.com/tensorflow/benchmarks).
 3. Installs default tensorflow.
 4. Runs `tf_cnn_benchmarks.py` in the default environment.
 5. Activates the Intel optimized tensorflow virtualenv and runs `tf_cnn_benchmarks.py` in the Intel Optimized environment.
