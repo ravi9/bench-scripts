@@ -79,15 +79,12 @@ export release=${arr[1]}
 
 echo "Intel Optimized TF version: $tfversion"
 
-echo "Creating a conda env for default TF and installing default TF with version $tfversion "
-yes 'y' | conda create -n tf_p37 python=3.7
-
-conda activate tf_p37
 # Clone benchmark scripts for appropriate TF version
 git clone -b cnn_tf_v${version}.${release}_compatible  https://github.com/tensorflow/benchmarks.git
 cd benchmarks/scripts/tf_cnn_benchmarks
 rm *.log # remove logs from any previous benchmark runs
 
+conda activate tensorflow_p37
 # Install default tensorflow (non-Intel-optimized)
 pip install tensorflow==${tfversion}
 
