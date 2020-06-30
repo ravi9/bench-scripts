@@ -36,6 +36,9 @@
 # This script runs training with TensorFlow's CNN Benchmarks on Azure DSVM and
 # summarizes throughput increases when using Intel optimized TensorFlow.
 
+export PATH=/data/anaconda/condabin/:$PATH
+eval "$(conda shell.bash hook)"
+
 TF_ENV_NAME=intel_tensorflow_p37
 # Set number of batches
 num_batches=( 30 )
@@ -66,13 +69,20 @@ echo "Networks: ${networks}"
 echo "Inference: $inf_flag"
 
 # Check TF version so that we clone the right benchmarks
-source activate ${TF_ENV_NAME}
+conda activate ${TF_ENV_NAME}
 export tfversion=$(python -c "import tensorflow as tf;print(tf.__version__)")
-source deactivate
+conda deactivate
+conda deactivate
 arr=(${tfversion//./ })  # Parse version and release
 export version=${arr[0]}
 export release=${arr[1]}
 
+echo "Intel Optimized TF version: $tfversion"
+
+echo "Creating a conda env for default TF and installing default TF with version $tfversion "
+yes 'y' | conda create -n tf_p37 python=3.7
+
+conda activate tf_p37
 # Clone benchmark scripts for appropriate TF version
 git clone -b cnn_tf_v${version}.${release}_compatible  https://github.com/tensorflow/benchmarks.git
 cd benchmarks/scripts/tf_cnn_benchmarks
@@ -99,15 +109,18 @@ for network in "${networks[@]}" ; do
   done
 done
 
+conda deactivate
+conda deactivate
+
 ## Run benchmark scripts in the Intel Optimized environment
-source activate ${TF_ENV_NAME}
+conda activate ${TF_ENV_NAME}
 
 for network in "${networks[@]}" ; do
   for bs in "${batch_sizes[@]}"; do
     echo -e "\n\n #### Starting $network and batch size = $bs ####\n\n"
 
     time python tf_cnn_benchmarks.py \
-    --data_format NCHW \
+    --data_format NHWC \
     --data_name imagenet \
     --device cpu \
     --mkl=True \
@@ -120,7 +133,7 @@ for network in "${networks[@]}" ; do
   done
 done
 
-source deactivate
+conda deactivate
 
 ## Print a summary of training throughputs and relative speedups across all networks/batch sizes
 
